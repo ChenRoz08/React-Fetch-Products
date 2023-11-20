@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Product } from "../models/products";
 
-const url = "http://fake-admin-panel.onrender.com/api";
+const url = import.meta.env.VITE_API_URL;
 export async function getAllProducts() {
   try {
     const { data } = await axios.get(`${url}/products`);

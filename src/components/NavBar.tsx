@@ -1,13 +1,18 @@
 import { Link } from "react-router-dom";
 import logo from "../images/logo.png";
+import { useUser } from "../contexts/UserContext";
 
 export function NavBar() {
+  const { user } = useUser();
+
   return (
     <nav className="max-w-5xl p-2 m-auto flex items-center justify-between">
-      {/* <div>Cart</div> */}
+      <div className=" text-orange-900 text-lg font-bold custom-text">
+        {user ? <p>{user.firstName}</p> : <Link to="/login"> התחברות</Link>}
+      </div>
       <div className="text-2xl">
         <Link to={"/"}>
-          <img className="h-28 w-28" src={logo} />
+          <img className="h-20 w-20" src={logo} />
         </Link>
       </div>
       <div className="flex gap-4 text-orange-900 text-lg font-bold custom-text ">
