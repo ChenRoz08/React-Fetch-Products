@@ -25,6 +25,8 @@ export function UserContextprovider({ children }: { children: ReactNode }) {
   const [token, setToken] = useState<string>(() => {
     const storageToken = localStorage.getItem("chen-token");
     if (storageToken === null) return "";
+    console.log(storageToken);
+
     return storageToken;
   });
 

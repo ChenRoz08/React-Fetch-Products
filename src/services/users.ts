@@ -4,7 +4,7 @@
 import axios from "axios";
 import { User } from "../models/users";
 
-const url = import.meta.env.VITE_APP_URL;
+const url = import.meta.env.VITE_API_URL;
 
 export async function login(body: { email: string; password: string }) {
   try {
@@ -12,7 +12,7 @@ export async function login(body: { email: string; password: string }) {
     const { data } = await axios.post(`${url}/login`, { ...body });
     if (!data.status) throw data.error;
 
-    return data.token.toString() as string;
+    return data.token as string;
   } catch (error) {
     return null;
   }
