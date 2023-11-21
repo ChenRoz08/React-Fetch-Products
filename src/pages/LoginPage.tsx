@@ -2,6 +2,7 @@ import { FormEvent, useState } from "react";
 import { LoginSchema, loginValidation } from "../validation/login";
 import { useUser } from "../contexts/UserContext";
 import { login } from "../services/users";
+import { Link } from "react-router-dom";
 
 export default function LoginPage() {
   const { updateToken, user, logout } = useUser();
@@ -58,7 +59,11 @@ export default function LoginPage() {
               type="email"
               onChange={(e) => (formData.email = e.target.value)}
             />
-            {errors.email && <p>{errors.email}</p>}
+            {errors.email && (
+              <small className="text-red-600 block italic custom-text">
+                {errors.email}
+              </small>
+            )}
           </div>
 
           <div className="mb-4">
@@ -74,13 +79,15 @@ export default function LoginPage() {
             {errors.password && <p>{errors.password}</p>}
           </div>
           <div className="mb-6 text-center">
+            {/* <Link to="/"> */}
             <button
               className="w-full px-4 py-2 font-bold text-white bg-orange-700 rounded-md hover:bg-orange-900 focus:outline-none focus:shadow-outline"
               type="submit"
-              onClick={handleClick}
+              // onClick={handleClick}
             >
-              התחבר
+              {user ? "התנתק" : "התחבר"}
             </button>
+            {/* </Link> */}
           </div>
         </form>
       </div>

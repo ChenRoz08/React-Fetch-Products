@@ -8,7 +8,6 @@ const url = import.meta.env.VITE_API_URL;
 
 export async function login(body: { email: string; password: string }) {
   try {
-    console.log(url);
     const { data } = await axios.post(`${url}/login`, { ...body });
     if (!data.status) throw data.error;
 
