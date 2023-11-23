@@ -7,12 +7,10 @@ export function NavBar() {
 
   return (
     <nav className="max-w-5xl p-2 m-auto flex items-center justify-between">
+      <div className=" text-orange-900 text-lg font-bold">Cart</div>
       <div className=" text-orange-900 text-lg font-bold custom-text">
-        {user ? (
-          <p>שלום {user.firstName}</p>
-        ) : (
-          <Link to="/login"> התחברות</Link>
-        )}
+        {user ? <p>שלום {user.firstName}</p> : "שלום אורח"}
+        <Link to="/login"> {user ? "התנתקות" : "התחברות"} </Link>
       </div>
       <div className="text-2xl">
         <Link to={"/"}>

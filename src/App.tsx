@@ -7,11 +7,12 @@ import { ProductSlugPage } from "./pages/ProductSlugPage";
 import { ErrorPage } from "./pages/ErrorPage";
 import { UserContextprovider } from "./contexts/UserContext";
 import LoginPage from "./pages/LoginPage";
+import { CartContextProvider } from "./contexts/CartContext";
 
 export default function App() {
   return (
     <>
-      <div>
+      <CartContextProvider>
         <UserContextprovider>
           <header className="border-b border-orange-900">
             <NavBar />
@@ -30,7 +31,7 @@ export default function App() {
             </Routes>
           </div>
         </UserContextprovider>
-      </div>
+      </CartContextProvider>
     </>
   );
 }

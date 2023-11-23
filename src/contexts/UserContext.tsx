@@ -48,6 +48,7 @@ export function UserContextprovider({ children }: { children: ReactNode }) {
   function logout() {
     localStorage.removeItem("chen-token");
     setUser(null);
+    setToken("");
   }
 
   return (
