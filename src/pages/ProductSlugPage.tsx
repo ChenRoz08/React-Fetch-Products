@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Product } from "../models/products";
 import { getProductBySlug } from "../services/products";
+import { useCart } from "../contexts/CartContext";
 
 export function ProductSlugPage() {
   const { slug } = useParams();
+  const { incrementQuantity, getItemQuantity, decrementQuantity } = useCart();
 
   const [product, setProduct] = useState<Product | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -36,35 +38,60 @@ export function ProductSlugPage() {
         </svg>
       </div>
     );
-
-  return (
-    <div className="flex gap-4 custom-text">
-      <div className="grid grid-rows-3 grid-flow-col ">
-        <img
-          className="w-72 h-80 object-contain row-span-3"
-          src={product?.image}
-          alt={product?.name}
-        />
-        <div className=" ">
-          <p className="text-xl font-bold text-orange-900">{product?.name}</p>
-          <div className="">
-            <p className="text-lg font-semibold text-black cursor-auto my-3">
-              מחיר: {product?.price} ₪
-            </p>
-            <p className="text-sm font-semibold text-gray-500 cursor-auto my-2">
-              מחיר אילת: {product?.eilatPrice} ₪
-            </p>
+  if (product !== null) {
+    return (
+      <div className="flex gap-4 custom-text">
+        <div className="grid grid-rows-3 grid-flow-col ">
+          <img
+            className="w-72 h-80 object-contain row-span-3"
+            src={product.image}
+            alt={product.name}
+          />
+          <div className=" ">
+            <p className="text-xl font-bold text-orange-900">{product.name}</p>
             <div className="">
-              <p className="mt-5">{product?.description}</p>
-              <div className="mt-10">
-                <button className="w-full bg-orange-700 text-white font-bold px-10 py-2 rounded-md">
-                  הוסף לעגלה
-                </button>
+              <p className="text-lg font-semibold text-black cursor-auto my-3">
+                מחיר: {product.price} ₪
+              </p>
+              <p className="text-sm font-semibold text-gray-500 cursor-auto my-2">
+                מחיר אילת: {product.eilatPrice} ₪
+              </p>
+              <div className="">
+                <p className="mt-5">{product.description}</p>
+
+                {getItemQuantity(product.id) === 0 ? (
+                  <div className="mt-10">
+                    <button
+                      className="w-full bg-orange-600 text-white font-bold p-4 rounded-md"
+                      onClick={() => incrementQuantity(product.id)}
+                    >
+                      הוסף לעגלה
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex items-center bg-orange-600 text-white w-full font-bold">
+                    <button
+                      className="bg-orange-950 text-white font-bold px-5 py-2 rounded-l-none"
+                      onClick={() => incrementQuantity(product.id)}
+                    >
+                      +
+                    </button>
+                    <div className="flex-grow text-center">
+                      {getItemQuantity(product.id)}
+                    </div>
+                    <button
+                      className="bg-orange-950 text-white font-bold px-5 py-2 rounded-r-none"
+                      onClick={() => decrementQuantity(product.id)}
+                    >
+                      -
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  }
 }

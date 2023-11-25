@@ -8,6 +8,7 @@ import { ErrorPage } from "./pages/ErrorPage";
 import { UserContextprovider } from "./contexts/UserContext";
 import LoginPage from "./pages/LoginPage";
 import { CartContextProvider } from "./contexts/CartContext";
+import { CartPage } from "./pages/CartPage";
 
 export default function App() {
   return (
@@ -25,6 +26,7 @@ export default function App() {
                 path="products/:slug"
                 element={<ProductSlugPage />}
               ></Route>
+              <Route path="/cart" element={<CartPage />}></Route>
               <Route path="/contact" element={<ContactUs />} />
               <Route path="*" element={<ErrorPage />} />
               <Route path="/login" element={<LoginPage />} />
