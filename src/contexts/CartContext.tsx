@@ -1,8 +1,14 @@
-import { ReactNode, createContext, useContext, useState } from "react";
+import {
+  ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { CartItem } from "../models/cartItem";
 
 type CartContextType = {
-  cartItems: CartItem;
+  items: CartItem[];
   incrementQuantity: (id: string) => void;
   decrementQuantity: (id: string) => void;
   getItemQuantity: (id: string) => number;
@@ -17,7 +23,15 @@ export function useCart() {
 }
 
 export function CartContextProvider({ children }: { children: ReactNode }) {
-  const [items, setItems] = useState<CartItem[]>([]);
+  const [items, setItems] = useState<CartItem[]>(() => {
+    const storageCart = localStorage.getItem("chen-cart");
+    if (storageCart === null) return [];
+    return JSON.parse(storageCart) as CartItem[];
+  });
+
+  useEffect(() => {
+    localStorage.setItem("chen-cart", JSON.stringify(items));
+  }, [items]);
 
   function incrementQuantity(id: string) {
     const index = items.findIndex((item) => item.id === id);
@@ -25,7 +39,8 @@ export function CartContextProvider({ children }: { children: ReactNode }) {
       if (index === -1) return [...prevItems, { id, quantity: 1 }];
 
       return prevItems.map((item) => {
-        if (index !== -1) return { ...item, quantity: item.quantity + 1 };
+        if (prevItems[index].id === item.id)
+          return { ...item, quantity: item.quantity + 1 };
         return { ...item };
       });
     });
@@ -33,12 +48,18 @@ export function CartContextProvider({ children }: { children: ReactNode }) {
   function decrementQuantity(id: string) {
     const index = items.findIndex((item) => item.id === id);
     if (index === -1) return;
-    setItems((prevItems) => {
-      return prevItems.map((item) => {
-        if (index !== -1) return { ...item, quantity: item.quantity - 1 };
+    if (items[index].quantity === 1) {
+      deleteItem(id);
+      return;
+    }
+    setItems((preItem) => {
+      return preItem.map((item) => {
+        if (preItem[index].id === item.id)
+          return { ...item, quantity: item.quantity - 1 };
         return { ...item };
       });
     });
+    setToLocalStorage();
   }
 
   function getItemQuantity(id: string) {
@@ -51,10 +72,16 @@ export function CartContextProvider({ children }: { children: ReactNode }) {
     setItems((prevItems) => {
       return prevItems.filter((item) => item.id !== id);
     });
+    setToLocalStorage();
   }
 
   function clearCart() {
     setItems([]);
+    setToLocalStorage();
+  }
+
+  function setToLocalStorage() {
+    localStorage.setItem("chen-cart", JSON.stringify(items));
   }
 
   return (
@@ -65,6 +92,7 @@ export function CartContextProvider({ children }: { children: ReactNode }) {
         clearCart,
         deleteItem,
         getItemQuantity,
+        items,
       }}
     >
       {children}

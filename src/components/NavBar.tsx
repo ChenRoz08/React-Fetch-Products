@@ -1,14 +1,18 @@
 import { Link } from "react-router-dom";
 import logo from "../images/logo.png";
 import { useUser } from "../contexts/UserContext";
+import { useCart } from "../contexts/CartContext";
 
 export function NavBar() {
   const { user } = useUser();
+  const { items } = useCart();
 
   return (
     <nav className="max-w-5xl p-2 m-auto flex items-center justify-between">
       <div className=" text-orange-900 text-lg font-bold">
-        <Link to="/cart">עגלה</Link>
+        <Link to="/cart">
+          {items.length > 0 && <small>{items.length}</small>} עגלה
+        </Link>
       </div>
       <div className=" text-orange-900 text-lg font-bold custom-text">
         {user ? <p>שלום {user.firstName}</p> : "שלום אורח"}
