@@ -27,7 +27,7 @@ export function CartPage() {
   if (isError || products === null)
     return (
       <Routes>
-        <Route path="/" element={<ErrorPage />} />
+        <Route path="*" element={<ErrorPage />} />
       </Routes>
     );
 

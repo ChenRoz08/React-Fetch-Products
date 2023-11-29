@@ -2,7 +2,6 @@ import { FormEvent, useState } from "react";
 import { LoginSchema, loginValidation } from "../validation/login";
 import { useUser } from "../contexts/UserContext";
 import { login } from "../services/users";
-import { Link } from "react-router-dom";
 
 export default function LoginPage() {
   const { updateToken, user, logout } = useUser();
