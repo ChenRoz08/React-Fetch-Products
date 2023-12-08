@@ -2,10 +2,14 @@ import { Link } from "react-router-dom";
 import logo from "../images/logo.png";
 import { useUser } from "../contexts/UserContext";
 import { useCart } from "../contexts/CartContext";
+import { useModal } from "../contexts/modalContext";
+import LoginPage from "./Modals/LoginModal";
+// import LoginPage from "../pages/LoginPage";
 
 export function NavBar() {
   const { user } = useUser();
   const { items } = useCart();
+  const { openModal } = useModal();
 
   return (
     <nav className="max-w-5xl p-2 m-auto flex items-center justify-between">
@@ -15,8 +19,10 @@ export function NavBar() {
         </Link>
       </div>
       <div className=" text-orange-900 text-lg font-bold custom-text">
-        {user ? <p>שלום {user.firstName}</p> : "שלום אורח"}
-        <Link to="/login"> {user ? "התנתקות" : "התחברות"} </Link>
+        {user ? <p> שלום {user.firstName}</p> : "שלום אורח"}
+        <button onClick={() => openModal(<LoginPage />)} className="px-5">
+          {user ? "התנתקות" : "התחברות"}
+        </button>
       </div>
       <div className="text-2xl">
         <Link to={"/"}>

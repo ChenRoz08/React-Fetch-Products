@@ -1,26 +1,21 @@
 import { useState } from "react";
-import { ZodObject, ZodRawShape, ZodError } from "zod";
+import { ZodError, ZodObject, ZodRawShape } from "zod";
 
 export function useValidation<T>(schema: ZodObject<ZodRawShape>) {
-  const [data, setData] = useState<T | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   function validate(formData: T) {
-    setErrors({});
-    setData(null);
-
     const response = schema.safeParse(formData);
-
     if (!response.success) {
       setErrors(parseErrors(response.error));
-      return false;
+      return null;
     }
 
-    setData(response.data as T);
-    return true;
+    setErrors({});
+    return response.data as T;
   }
 
-  return { data, errors, validate };
+  return { errors, validate };
 }
 
 function parseErrors(rawErrors: ZodError) {
@@ -28,7 +23,8 @@ function parseErrors(rawErrors: ZodError) {
   const formattedErrors = rawErrors.format() as Record<string, any>;
 
   for (const key in formattedErrors) {
-    errors[key] = formattedErrors[key]._errors[0];
+    if (!formattedErrors[key]?._errors) continue;
+    errors[key] = formattedErrors[key]?._errors[0];
   }
 
   return errors;
