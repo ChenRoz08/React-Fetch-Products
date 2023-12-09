@@ -6,6 +6,8 @@ import {
   useState,
 } from "react";
 import { CartItem } from "../models/cartItem";
+import { useModal } from "./modalContext";
+import { CartModal } from "../components/Modals/CartModal";
 
 type CartContextType = {
   items: CartItem[];
@@ -23,6 +25,7 @@ export function useCart() {
 }
 
 export function CartContextProvider({ children }: { children: ReactNode }) {
+  const { closeModal, openModal, modalChildren } = useModal();
   const [items, setItems] = useState<CartItem[]>(() => {
     const storageCart = localStorage.getItem("chen-cart");
     if (storageCart === null) return [];
@@ -49,7 +52,7 @@ export function CartContextProvider({ children }: { children: ReactNode }) {
     const index = items.findIndex((item) => item.id === id);
     if (index === -1) return;
     if (items[index].quantity === 1) {
-      deleteItem(id);
+      openModal(<CartModal id={id} />);
       return;
     }
     setItems((preItem) => {
@@ -72,6 +75,7 @@ export function CartContextProvider({ children }: { children: ReactNode }) {
     setItems((prevItems) => {
       return prevItems.filter((item) => item.id !== id);
     });
+    modalChildren && closeModal();
     setToLocalStorage();
   }
 
